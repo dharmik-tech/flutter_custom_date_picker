@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:rti_employee/models/job_role.dart';
+import 'package:rti_employee/utils/custom_date_picker.dart';
 
 import '../utils/color_constants.dart';
 
@@ -14,6 +17,8 @@ class AddEmployeeScreen extends StatefulWidget {
 
 class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   List<JobRole>? jobRoles;
+
+  DateTime? _selectedDate;
 
   @override
   void initState() {
@@ -194,180 +199,127 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return Dialog(
-                                    backgroundColor: Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(16),)),
-                                    alignment: Alignment.center,
-                                    elevation: 4,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                MaterialButton(
-                                                  onPressed: () {},
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  color: AppColor.lightBlue,
-                                                  elevation: 0,
-                                                  height: 36,
-                                                  child: const Text('Today',
-                                                      style: TextStyle(
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return Dialog(
+                                        backgroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                          Radius.circular(16),
+                                        )),
+                                        alignment: Alignment.center,
+                                        elevation: 4,
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                                child: Material(
+                                                    color: Colors.white,
+                                                    child:
+                                                        CustomCalendarDatePicker(
+                                                      initialDate: DateTime.now(),
+                                                      firstDate: DateTime.now(),
+                                                      lastDate: DateTime(2050),
+                                                      onDateChanged: (newDate) {
+                                                        log('onDateChanged');
+                                                        setState(() {
+                                                          _selectedDate = newDate;
+                                                        });
+                                                      },
+                                                    )
+                                                    // CalendarDatePicker(
+                                                    //   initialDate: DateTime.now(),
+                                                    //   firstDate: DateTime.now(),
+                                                    //   lastDate: DateTime(2050),
+                                                    //   onDateChanged: (newDate) {
+                                                    //     log('onDateChanged');
+                                                    //   },
+                                                    // ),
+                                                    ),
+                                              ),
+                                              const Divider(
+                                                height: 1,
+                                                color: AppColor.borderGrey,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  _selectedDate != null
+                                                      ? Text(DateFormat(
+                                                              'dd/MM/yyyy')
+                                                          .format(
+                                                              _selectedDate!))
+                                                      : const SizedBox.shrink(),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      MaterialButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        color:
+                                                            AppColor.lightBlue,
+                                                        elevation: 0,
+                                                        height: 36,
+                                                        child: const Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                              color: AppColor
+                                                                  .primaryBlue,
+                                                              fontSize: 14,
+                                                            )),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 16,
+                                                      ),
+                                                      MaterialButton(
+                                                        onPressed: () {},
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
                                                         color: AppColor
                                                             .primaryBlue,
-                                                        fontSize: 14,
-                                                      )),
-                                                ),
-                                                MaterialButton(
-                                                  onPressed: () {},
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
+                                                        elevation: 0,
+                                                        height: 36,
+                                                        child: const Text(
+                                                            'Save',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 14,
+                                                            )),
+                                                      ),
+                                                    ],
                                                   ),
-                                                  color: AppColor.lightBlue,
-                                                  elevation: 0,
-                                                  height: 36,
-                                                  child:
-                                                      const Text('Next Monday',
-                                                          style: TextStyle(
-                                                            color: AppColor
-                                                                .primaryBlue,
-                                                            fontSize: 14,
-                                                          )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                MaterialButton(
-                                                  onPressed: () {},
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  color: AppColor.lightBlue,
-                                                  elevation: 0,
-                                                  height: 36,
-                                                  child:
-                                                      const Text('Next Tuesday',
-                                                          style: TextStyle(
-                                                            color: AppColor
-                                                                .primaryBlue,
-                                                            fontSize: 14,
-                                                          )),
-                                                ),
-                                                MaterialButton(
-                                                  onPressed: () {},
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  color: AppColor.lightBlue,
-                                                  elevation: 0,
-                                                  height: 36,
-                                                  child:
-                                                      const Text('After 1 week',
-                                                          style: TextStyle(
-                                                            color: AppColor
-                                                                .primaryBlue,
-                                                            fontSize: 14,
-                                                          )),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Material(
-                                            color: Colors.white,
-                                            child: CalendarDatePicker(
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime.now(),
-                                              lastDate: DateTime(2050),
-                                              onDateChanged: (newDate) {},
-                                            ),
-                                          ),
-                                          const Divider(
-                                            height: 1,
-                                            color: AppColor.borderGrey,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                            const Text('selected Dt'),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  MaterialButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          4),
-                                                    ),
-                                                    color: AppColor.lightBlue,
-                                                    elevation: 0,
-                                                    height: 36,
-                                                    child: const Text('Cancel',
-                                                        style: TextStyle(
-                                                          color: AppColor
-                                                              .primaryBlue,
-                                                          fontSize: 14,
-                                                        )),
-                                                  ),
-
-                                                  const SizedBox(
-                                                    width: 16,
-                                                  ),
-                                                  MaterialButton(
-                                                    onPressed: () {},
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          4),
-                                                    ),
-                                                    color: AppColor.primaryBlue,
-                                                    elevation: 0,
-                                                    height: 36,
-                                                    child: const Text('Save',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                        )),
-                                                  ),
-
                                                 ],
-                                              ),
+                                              )
                                             ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   );
                                 });
                           },
